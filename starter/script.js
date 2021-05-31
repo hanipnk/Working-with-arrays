@@ -74,3 +74,44 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+/*
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+// Slice method ( it does NOT mutate the original array)
+console.log(arr.slice(2));
+console.log(arr.slice(2, 4));
+console.log(arr.slice(-2)); // ---> (2) ["d", "e"]
+console.log(arr.slice(-1));
+console.log(arr.slice(1, -2)); // ---> (2) ["b", "c"]
+
+console.log(arr.slice()); // -----> (5) ["a", "b", "c", "d", "e"]  it makes a sallow copy of 'arr' array.
+console.log([...arr]); // same result as 'arr.slice()'
+// it's personal preference which to use
+// but the only time i should use 'slice' is when I want to chain multiple methods together
+
+// Splice ( it DOES mutate the original array, it deletes the selected part from the original array )
+
+//console.log(arr.splice(2)); //------> (3)["c", "d", "e"]
+arr.splice(-1); // ---> (4) ["a", "b", "c", "d"]
+console.log(arr);
+arr.splice(1, 2); // ---> this time the second parameter '2' is included, so it gets deleted
+// unlike 'slice' method which does not include the second parameter in
+console.log(arr); // --------> (2) ["a", "d"]
+
+// Reverse(it DOES mutate the original array)
+arr = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'f'];
+console.log(arr2.reverse()); // -> ["f", "g", "h", "i", "j"]
+console.log(arr2); // ->  ["f", "g", "h", "i", "j"]
+
+// Concat ( it does NOT mutate the original array)
+const letters = arr.concat(arr2); // -> (10) ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+console.log(letters);
+console.log([...arr, ...arr2]); // same result as 'arr.concat(arr2)'
+
+// Join (it makes an array to a string)
+console.log(letters.join('-')); // ->a-b-c-d-e-f-g-h-i-j
+
+*/
