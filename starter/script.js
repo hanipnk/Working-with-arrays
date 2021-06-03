@@ -72,7 +72,7 @@ const displayMovements = function (movements) {
     <div class="movements__row">
      <div class="movements__type movements__type--${type}">${
       i + 1
-    } ${type}{</div>
+    } ${type}</div>
      <div class="movements__value">${mov}€</div>
   </div>`;
 
@@ -80,40 +80,36 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
 //console.log(containerMovements.innerHTML);
 
 // Display Balance to the app with using 'reduce' method
-const calcDisplayBalance = function (movments) {
+const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance} €`;
 };
-calcDisplayBalance(account1.movements);
 
 //Display Summary to the app
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      console.log(arr);
+      //console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-
-calcDisplaySummary(account1.movements);
 
 // Computing Usernames
 const createUsernames = function (accs) {
@@ -128,6 +124,36 @@ const createUsernames = function (accs) {
 // const user = 'Steven Thomas Williams'; // stw
 
 createUsernames(accounts);
+
+// Event Handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // Prevent Forn from submitting (stoping the page gets reloaded)
+  e.preventDefault();
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    //Clear input fields (ID and Password)
+    inputLoginUsername.value = inputLoginPin.value = ''; // computed from right to left
+    //Clear the mouse focus from 'PIN' after login
+    inputLoginPin.blur();
+    // Display movements
+    displayMovements(currentAccount.movements);
+    //Display balance
+    calcDisplayBalance(currentAccount.movements);
+    //Display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 //console.log(accounts);
 
@@ -495,5 +521,54 @@ const totalDepositinUSD2 = movements
   .reduce((acc, mov) => acc + mov, 0);
 
 console.log(totalDepositinUSD2);
+
+*/
+
+/*
+// Coding Challenge #3
+
+const calcAverageHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter((age, i, arr) => {
+      console.log(arr);
+      return age >= 18;
+    })
+    .reduce((acc, age, i, arr) => {
+      console.log(arr);
+      return acc + age / arr.length;
+    }, 0);
+console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+
+const calcAverageHumanAge2 = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+console.log(calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]));
+
+*/
+
+/*
+
+// Find Method (Unlike 'filter' , 'find' will only return the first element in the array that satisfies certain condition )
+
+const firstWithdrawal = movements.find(mov => mov < 0);
+
+console.log(movements); // (8) [200, 450, -400, 3000, -650, -130, 70, 1300]
+console.log(firstWithdrawal); // -400
+// 'find' method does NOT return an array but the element itself
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+// Using 'for of loop'
+for (const account of accounts) {
+  if (account.owner === 'Jessica Davis') {
+    console.log(account);
+  }
+}
 
 */
