@@ -83,9 +83,10 @@ const displayMovements = function (movements) {
 //console.log(containerMovements.innerHTML);
 
 // Display Balance to the app with using 'reduce' method
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0); // creates a NEW property in accounts object
+
+  labelBalance.textContent = `${acc.balance} €`;
 };
 
 //Display Summary to the app
@@ -114,7 +115,7 @@ const calcDisplaySummary = function (acc) {
 // Computing Usernames
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
-    acc.username = acc.owner
+    acc.username = acc.owner // creates a NEW property in accounts object
       .toLowerCase()
       .split(' ')
       .map(name => name[0])
@@ -125,12 +126,21 @@ const createUsernames = function (accs) {
 
 createUsernames(accounts);
 
-// Event Handler
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+  //Display balance
+  calcDisplayBalance(acc);
+  //Display summary
+  calcDisplaySummary(acc);
+};
+
+// Event Handlers
 let currentAccount;
 
 btnLogin.addEventListener('click', function (e) {
-  // Prevent Forn from submitting (stoping the page gets reloaded)
-  e.preventDefault();
+  // Prevent Form from submitting (stoping the page gets reloaded)
+  e.preventDefault(); // common use case when working with form
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
@@ -146,15 +156,57 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = ''; // computed from right to left
     //Clear the mouse focus from 'PIN' after login
     inputLoginPin.blur();
-    // Display movements
-    displayMovements(currentAccount.movements);
-    //Display balance
-    calcDisplayBalance(currentAccount.movements);
-    //Display summary
-    calcDisplaySummary(currentAccount);
+
+    // Update UI
+    updateUI(currentAccount);
   }
 });
 
+// Transfering money
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    // Update UI
+    updateUI(currentAccount);
+    inputTransferAmount.blur();
+  }
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index); // 'findIndex' returns the 'index number' which matches the condition
+    // .indexOf(23) ---> 'findIndex' is similar to 'indexOf' , however 'indexOf'  can only be used in arrays
+    // 'indexOf' can not also set the condition that returns true or false.
+
+    // Delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+});
 //console.log(accounts);
 
 // const createusername = function (accs) {
@@ -207,8 +259,8 @@ console.log([...arr]); // same result as 'arr.slice()'
 //console.log(arr.splice(2)); //------> (3)["c", "d", "e"]
 arr.splice(-1); // ---> (4) ["a", "b", "c", "d"]
 console.log(arr);
-arr.splice(1, 2); // ---> this time the second parameter '2' is included, so it gets deleted
-// unlike 'slice' method which does not include the second parameter in
+arr.splice(1, 2); // ---> (starting index, deleteCount)
+// starting from index1 delete 2 elements
 console.log(arr); // --------> (2) ["a", "d"]
 
 // Reverse(it DOES mutate the original array)
