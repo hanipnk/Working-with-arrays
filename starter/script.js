@@ -62,11 +62,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
   // .textContent = 0
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -221,6 +223,14 @@ btnClose.addEventListener('click', function (e) {
   }
   inputCloseUsername.value = inputClosePin.value = '';
 });
+
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
 //console.log(accounts);
 
 // const createusername = function (accs) {
@@ -663,6 +673,8 @@ console.log(movements.filter(deposit));
 
 */
 
+/*
+
 // 'flat' and 'flatMap' methods
 // flat method removes the nested arrays
 
@@ -695,3 +707,84 @@ const overalBalance3 = accounts
   .flatMap(acc => acc.movements)
   .reduce((acc, mov) => acc + mov, 0);
 console.log(overalBalance3);
+
+
+*/
+
+/*
+
+// Sorting Arrays (it mutates the original arrays)
+
+//Strings
+const owners = ['Jonas', 'Zack', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+
+// Numbers
+console.log(movements);
+
+// return < 0, A < B (keep order)
+// return > 0, B < A (Switch order)
+
+// Ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (b > a) return -1;
+// });
+movements.sort((a, b) => a - b);
+console.log(movements);
+// Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (b > a) return 1;
+// });
+movements.sort((a, b) => b - a);
+console.log(movements);
+
+*/
+
+/*
+
+const arr = [1, 2, 3, 4, 5, 6, 7];
+console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+// Empty arrays + fill method
+const x = new Array(7); //(when it gets only one value => length of the array)
+console.log(x); //  [empty ×7]
+
+console.log(x.map(() => 5)); // [empty ×7] it does not work
+
+//x.fill(1);  // (7) [1, 1, 1, 1, 1, 1, 1]
+//x.fill(1, 3); // (element to fill, starting point)  ---> (7) [empty ×3, 1, 1, 1, 1]
+console.log(x);
+
+x.fill(1, 3, 5); // (element to fill, starting point, end point) end point is not included
+console.log(x); // 7) [empty ×3, 1, 1, empty ×2]
+
+arr.fill(23, 4, 6); // it MUTATES the original array
+console.log(arr); // (7) [1, 2, 3, 4, 23, 23, 7]
+
+// Array.from
+const y = Array.from({ length: 7 }, () => 1); // it needs an empty parameter to fill with the array
+console.log(y); // (7) [1, 1, 1, 1, 1, 1, 1]
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1); // (cur, i) => i + 1 same as using map method. returning i+1
+console.log(z); // (7) [1, 2, 3, 4, 5, 6, 7]
+
+// Using Array.from to get the values from UI
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUI);
+
+  // Using spread operator to get the values from UI then mapping separately
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+  const movementsUIelements = movementsUI2.map(el =>
+    Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUIelements);
+});
+
+*/
