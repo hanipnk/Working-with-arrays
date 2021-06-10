@@ -856,6 +856,8 @@ console.log(convertTitleCase('and here is another title with an EXAMPLE'));
 
 */
 
+/*
+
 // Coding Challenge 4
 
 const dogs = [
@@ -936,3 +938,66 @@ const dogsSorted = dogs
   .slice()
   .sort((a, b) => a.recommededFood - b.recommededFood);
 console.log(dogsSorted);
+
+
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+dogs.forEach(dog => (dog.recommededFood = Math.trunc(dog.weight ** 0.75 * 28)));
+console.log(dogs);
+
+const sarahdog = dogs.find(dog => dog.owners.includes('Sarah'));
+
+console.log(
+  `Sarah'sdog is eatting too ${
+    sarahdog.curFood > sarahdog.recommededFood ? 'much' : 'little'
+  }`
+);
+
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.recommededFood < dog.curFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.recommededFood > dog.curFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooLittle);
+
+console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much!`);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little!`);
+
+console.log(dogs.some(dog => dog.recommededFood === dog.curFood));
+
+console.log(
+  dogs.some(
+    dog =>
+      dog.curFood <= dog.recommededFood * 1.1 &&
+      dog.curFood >= dog.recommededFood * 0.9
+  )
+);
+
+const okaydogs = dogs.filter(
+  dog =>
+    dog.curFood <= dog.recommededFood * 1.1 &&
+    dog.curFood >= dog.recommededFood * 0.9
+);
+console.log(okaydogs);
+
+const copydogsCorrect = dogs
+  .slice()
+  .sort((a, b) => a.recommededFood - b.recommededFood); // recommededFood is inside of dogs object
+console.log(copydogsCorrect);
+
+// const copydogs = dogs.slice();
+// const ascending = copydogs.map(dog => dog.recommededFood).sort((a, b) => a - b);
+// console.log(ascending); // (4) [133, 191, 284, 376]
+// the copy object is not going to be changed. not a good solution in this case.
+
+
+*/
